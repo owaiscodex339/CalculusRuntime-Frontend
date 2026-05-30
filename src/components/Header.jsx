@@ -2,11 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 
 const navLinks = [
-  { to: "/partial-derivatives", label: "Partial Derivatives" },
-  { to: "/vector-calculus", label: "Vector Calculus" },
-  { to: "/test", label: "Continuity" },
-  { to: "/extreme", label: "Extrema" },
-  { to: "/volumecalculator", label: "Volume" },
+  { to: "/partial-derivatives", label: "Partials", type: "Guide" },
+  { to: "/vector-calculus", label: "Vectors", type: "Guide" },
+  { to: "/test", label: "Continuity", type: "Tool" },
+  { to: "/extreme", label: "Extrema", type: "Tool" },
+  { to: "/volumecalculator", label: "Integrals", type: "Tool" },
 ];
 
 function Header({ darkMode, onToggleDark }) {
@@ -37,14 +37,18 @@ function Header({ darkMode, onToggleDark }) {
     <header className="site-header" ref={headerRef}>
       {/* Brand */}
       <NavLink className="site-brand" to="/" onClick={() => setMenuOpen(false)}>
-        Calculus Studio
+        <span className="brand-mark" aria-hidden="true">∂</span>
+        <span className="brand-text">
+          <span>Calculus Studio</span>
+          <small>Multivariable tools</small>
+        </span>
       </NavLink>
 
       {/* Desktop nav — hidden on mobile via CSS */}
       <nav className="site-nav" aria-label="Primary navigation">
-        {navLinks.map(({ to, label }) => (
-          <NavLink key={to} to={to}>
-            {label}
+        {navLinks.map(({ to, label, type }) => (
+          <NavLink key={to} to={to} title={type}>
+            <span>{label}</span>
           </NavLink>
         ))}
       </nav>
@@ -56,7 +60,7 @@ function Header({ darkMode, onToggleDark }) {
           onClick={onToggleDark}
           aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
         >
-          {darkMode ? "☀️" : "🌙"}
+          {darkMode ? "Light" : "Dark"}
         </button>
 
         <button

@@ -2,25 +2,9 @@ import React, {
   useState,
   useEffect,
   useRef,
-  useMemo,
   useCallback,
 } from "react";
 import * as math from "mathjs";
-
-// ─── KaTeX inline renderer ─────────────────────────────────────────────────
-const InlineMath = ({ latex }) => {
-  const ref = useRef(null);
-  useEffect(() => {
-    if (window.katex && ref.current) {
-      try {
-        window.katex.render(latex, ref.current, { throwOnError: false });
-      } catch {
-        ref.current.textContent = latex;
-      }
-    }
-  }, [latex]);
-  return <span ref={ref}>{latex}</span>;
-};
 
 const BlockMath = ({ latex }) => {
   const ref = useRef(null);
@@ -160,7 +144,6 @@ function classifyPoint(node, x, y) {
 
 // ─── Component ─────────────────────────────────────────────────────────────
 export default function ExtremeValueFinder() {
-  const [funcStr, setFuncStr] = useState("");
   const [inputVal, setInputVal] = useState("");
   const [results, setResults] = useState(null);
   const [error, setError] = useState("");
@@ -187,7 +170,6 @@ export default function ExtremeValueFinder() {
   const loadExample = useCallback(
     (ex) => {
       setInputVal(ex.expr);
-      setFuncStr(ex.expr);
       if (mathFieldRef.current) mathFieldRef.current.latex(ex.latex);
       showToast(`Loaded: ${ex.label}`);
     },
@@ -232,7 +214,6 @@ export default function ExtremeValueFinder() {
 
   const clear = () => {
     setInputVal("");
-    setFuncStr("");
     setResults(null);
     setError("");
     if (mathFieldRef.current) mathFieldRef.current.latex("");
