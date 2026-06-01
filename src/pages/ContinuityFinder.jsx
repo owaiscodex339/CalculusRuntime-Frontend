@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import * as math from 'mathjs';
 import { latexToMathJs } from 'crosstex';
-import { BlockMath, InlineMath, renderLatexToElement } from '../components/Math';
+import { InlineMath, renderLatexToElement } from '../components/Math';
 
 const ContinuityFinder = () => {
     const [variables, setVariables] = useState([{ name: 'x', value: '0' }, { name: 'y', value: '0' }]);
@@ -478,117 +478,6 @@ const ContinuityFinder = () => {
                     height: 3px;
                     margin: 0 auto 1.2rem;
                     width: min(220px, 50vw);
-                }
-
-                .lesson-section {
-                    display: grid;
-                    gap: 1rem;
-                    margin-bottom: 1.2rem;
-                }
-
-                .lesson-intro,
-                .lesson-card,
-                .lesson-proof,
-                .lesson-warning,
-                .lesson-advanced {
-                    background: rgba(255, 253, 248, 0.92);
-                    border: 1px solid var(--continuity-line);
-                    border-radius: 8px;
-                    box-shadow: var(--continuity-shadow-sm);
-                    padding: clamp(1rem, 3vw, 1.35rem);
-                }
-
-                .lesson-intro {
-                    border-left: 4px solid var(--continuity-teal);
-                }
-
-                .lesson-kicker {
-                    color: var(--continuity-teal);
-                    font-size: 0.76rem;
-                    font-weight: 900;
-                    letter-spacing: 0.14em;
-                    margin-bottom: 0.55rem;
-                    text-transform: uppercase;
-                }
-
-                .lesson-intro h2,
-                .lesson-card h3,
-                .lesson-proof h3,
-                .lesson-warning h3,
-                .lesson-advanced h3 {
-                    color: #15100c;
-                    font-family: Georgia, "Times New Roman", serif;
-                    line-height: 1.16;
-                    margin: 0 0 0.75rem;
-                }
-
-                .lesson-intro h2 {
-                    font-size: clamp(1.65rem, 4vw, 2.45rem);
-                }
-
-                .lesson-card h3,
-                .lesson-proof h3,
-                .lesson-warning h3,
-                .lesson-advanced h3 {
-                    font-size: clamp(1.18rem, 2.6vw, 1.55rem);
-                }
-
-                .lesson-intro p,
-                .lesson-card p,
-                .lesson-proof p,
-                .lesson-warning p,
-                .lesson-advanced p {
-                    color: var(--continuity-muted);
-                    line-height: 1.7;
-                    margin: 0.65rem 0 0;
-                }
-
-                .lesson-grid {
-                    display: grid;
-                    gap: 1rem;
-                    grid-template-columns: repeat(3, minmax(0, 1fr));
-                }
-
-                .lesson-formula {
-                    background: var(--continuity-soft);
-                    border: 1px solid var(--continuity-line);
-                    border-radius: 8px;
-                    color: var(--continuity-blue);
-                    margin-top: 0.85rem;
-                    overflow-x: auto;
-                    padding: 0.75rem;
-                }
-
-                .lesson-proof {
-                    border-left: 4px solid var(--continuity-blue);
-                }
-
-                .lesson-proof-list,
-                .lesson-warning-list {
-                    color: var(--continuity-muted);
-                    display: grid;
-                    gap: 0.65rem;
-                    line-height: 1.65;
-                    margin: 0.9rem 0 0;
-                    padding-left: 1.25rem;
-                }
-
-                .lesson-warning {
-                    border-left: 4px solid var(--continuity-gold);
-                }
-
-                .lesson-advanced {
-                    border-left: 4px solid var(--continuity-plum);
-                }
-
-                .lesson-note {
-                    background: rgba(47, 116, 107, 0.08);
-                    border: 1px solid rgba(47, 116, 107, 0.18);
-                    border-radius: 8px;
-                    color: var(--continuity-ink);
-                    line-height: 1.65;
-                    margin-top: 0.85rem;
-                    padding: 0.85rem;
                 }
 
                 .demo-section,
@@ -1073,10 +962,6 @@ const ContinuityFinder = () => {
                         grid-template-columns: 1fr;
                     }
 
-                    .lesson-grid {
-                        grid-template-columns: 1fr;
-                    }
-
                     .examples-grid {
                         grid-template-columns: 1fr;
                     }
@@ -1122,116 +1007,6 @@ const ContinuityFinder = () => {
             <div className="app-container">
                 <h1 className="app-title">Continuity Analyzer</h1>
                 <div className="app-subtitle">Multi-Variable Function Continuity Analysis</div>
-
-                <section className="lesson-section" aria-labelledby="epsilon-delta-guide">
-                    <div className="lesson-intro">
-                        <div className="lesson-kicker">Concept Guide</div>
-                        <h2 id="epsilon-delta-guide">Continuity Through the Epsilon-Delta Idea</h2>
-                        <p>
-                            Continuity means controlled behavior: when the input is moved only a little, the output can
-                            be forced to move only a little. The epsilon-delta definition turns that visual idea into a
-                            precise promise.
-                        </p>
-                        <div className="lesson-formula">
-                            <BlockMath latex={"\\forall\\varepsilon>0\\;\\exists\\delta>0\\;\\text{ such that }\\;0<|x-a|<\\delta\\Rightarrow |f(x)-f(a)|<\\varepsilon"} />
-                        </div>
-                        <p>
-                            Read it like this: for every output tolerance <InlineMath latex={"\\varepsilon"} />, we can
-                            find an input tolerance <InlineMath latex={"\\delta"} /> that keeps the function value inside
-                            the desired output window.
-                        </p>
-                    </div>
-
-                    <div className="lesson-grid">
-                        <article className="lesson-card">
-                            <h3>1. The Basic Picture</h3>
-                            <p>
-                                <InlineMath latex={"\\varepsilon"} /> is the maximum output error you allow around
-                                <InlineMath latex={"f(a)"} />. <InlineMath latex={"\\delta"} /> is how close the input
-                                must stay to <InlineMath latex={"a"} />. Smaller epsilon usually forces a smaller delta.
-                            </p>
-                            <div className="lesson-note">
-                                The deep point is not that nearby values look close. It is that closeness can be
-                                guaranteed no matter how strict the output demand becomes.
-                            </div>
-                        </article>
-
-                        <article className="lesson-card">
-                            <h3>2. A Clean Example</h3>
-                            <p>
-                                For <InlineMath latex={"f(x)=2x+1"} /> at <InlineMath latex={"a=3"} />, we compare the
-                                output error to the input error.
-                            </p>
-                            <div className="lesson-formula">
-                                <BlockMath latex={"|f(x)-f(3)|=|(2x+1)-7|=2|x-3|"} />
-                            </div>
-                            <p>
-                                If we choose <InlineMath latex={"\\delta=\\varepsilon/2"} />, then
-                                <InlineMath latex={"|x-3|<\\delta"} /> guarantees
-                                <InlineMath latex={"|f(x)-f(3)|<\\varepsilon"} />.
-                            </p>
-                        </article>
-
-                        <article className="lesson-card">
-                            <h3>3. Why Jumps Fail</h3>
-                            <p>
-                                A jump discontinuity fails because one side of the graph refuses to stay near
-                                <InlineMath latex={"f(a)"} />, no matter how tiny the input window becomes.
-                            </p>
-                            <div className="lesson-formula">
-                                <BlockMath latex={"f(x)=\\begin{cases}0,&x<0\\\\1,&x\\ge 0\\end{cases}"} />
-                            </div>
-                            <p>
-                                At <InlineMath latex={"0"} />, choose <InlineMath latex={"\\varepsilon=1/2"} />. Every
-                                <InlineMath latex={"\\delta"} />-window contains negative inputs with output
-                                <InlineMath latex={"0"} />, too far from <InlineMath latex={"f(0)=1"} />.
-                            </p>
-                        </article>
-                    </div>
-
-                    <div className="lesson-proof">
-                        <h3>How to Prove Continuity with Epsilon-Delta</h3>
-                        <p>
-                            A proof is a control plan. You start from the target
-                            <InlineMath latex={"|f(x)-f(a)|<\\varepsilon"} /> and work backward until you discover a
-                            condition on <InlineMath latex={"|x-a|"} />.
-                        </p>
-                        <ol className="lesson-proof-list">
-                            <li>Write the output error <InlineMath latex={"|f(x)-f(a)|"} />.</li>
-                            <li>Simplify it until it contains <InlineMath latex={"|x-a|"} />.</li>
-                            <li>Choose a <InlineMath latex={"\\delta"} /> that makes the output error less than <InlineMath latex={"\\varepsilon"} />.</li>
-                            <li>Finish by saying: whenever <InlineMath latex={"|x-a|<\\delta"} />, the required inequality follows.</li>
-                        </ol>
-                    </div>
-
-                    <div className="lesson-warning">
-                        <h3>The Three Conditions Behind Continuity</h3>
-                        <ul className="lesson-warning-list">
-                            <li><InlineMath latex={"f(a)"} /> must be defined.</li>
-                            <li><InlineMath latex={"\\lim_{x\\to a}f(x)"} /> must exist.</li>
-                            <li>The limit must equal the actual value: <InlineMath latex={"\\lim_{x\\to a}f(x)=f(a)"} />.</li>
-                        </ul>
-                        <p>
-                            Holes, jumps, vertical asymptotes, and path-dependent limits break one of these conditions.
-                        </p>
-                    </div>
-
-                    <div className="lesson-advanced">
-                        <h3>Advanced View: Several Variables</h3>
-                        <p>
-                            For a function like <InlineMath latex={"f(x,y)"} />, the same idea becomes: every point
-                            <InlineMath latex={"(x,y)"} /> close enough to <InlineMath latex={"(a,b)"} /> must force
-                            <InlineMath latex={"f(x,y)"} /> close to <InlineMath latex={"f(a,b)"} />.
-                        </p>
-                        <div className="lesson-formula">
-                            <BlockMath latex={"\\sqrt{(x-a)^2+(y-b)^2}<\\delta\\Rightarrow |f(x,y)-f(a,b)|<\\varepsilon"} />
-                        </div>
-                        <p>
-                            This is stronger than checking one path. In multivariable calculus, every possible approach
-                            direction must obey the same output-control promise.
-                        </p>
-                    </div>
-                </section>
 
                 {/* Demo Examples */}
                 <div className="demo-section">

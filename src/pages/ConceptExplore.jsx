@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { InlineMath } from "../components/Math";
+import { BlockMath, InlineMath } from "../components/Math";
 import { conceptGroups, getConceptSlug } from "./SimpleConcepts";
 import "./ConceptExplore.css";
 
@@ -15,13 +15,46 @@ const conceptDetails = {
     checks: ["Count the input variables first.", "Remember that the output can still be one number.", "Read the graph as a model of input space plus value."],
   },
   "continuity-using-the-epsilon-delta-idea": {
-    formula: "0<|x-a|<\\delta \\Rightarrow |f(x)-L|<\\epsilon",
+    formula: "\\forall\\varepsilon>0\\;\\exists\\delta>0\\;\\text{ such that }\\;0<|x-a|<\\delta\\Rightarrow |f(x)-f(a)|<\\varepsilon",
     examples: [
-      { label: "Goal", math: "|f(x)-L|<\\epsilon", note: "Choose the output error you are willing to tolerate." },
-      { label: "Control", math: "|x-a|<\\delta", note: "Find how close the input must stay to keep the output inside the goal." },
-      { label: "Conclusion", math: "\\lim_{x\\to a}f(x)=L", note: "Every close enough input gives a close enough output." },
+      { label: "Goal", math: "|f(x)-f(a)|<\\varepsilon", note: "Choose the output error you are willing to tolerate around the actual function value." },
+      { label: "Control", math: "|x-a|<\\delta", note: "Find how close the input must stay to keep the output inside the epsilon window." },
+      { label: "Conclusion", math: "\\lim_{x\\to a}f(x)=f(a)", note: "Every close enough input gives a close enough output, and the limit agrees with the value." },
     ],
-    checks: ["Start with the output tolerance.", "Work backward to an input distance.", "The same delta must protect every nearby input."],
+    checks: ["Start with the output tolerance.", "Work backward to an input distance.", "The same delta must protect every nearby input.", "Check that the function value exists and matches the limit."],
+    deepDive: [
+      {
+        title: "The Basic Promise",
+        body: "Continuity is not just a graph that looks unbroken. It is a guarantee of control: if someone demands the output stay inside any tiny error band, you can choose an input band small enough to force that result.",
+        math: "\\varepsilon\\text{ controls output error, while }\\delta\\text{ controls input distance.}",
+      },
+      {
+        title: "A Clean Proof Example",
+        body: "For f(x)=2x+1 at a=3, compare the output error with the input error. Once the output error becomes 2|x-3|, the right delta choice is visible.",
+        math: "|f(x)-f(3)|=|(2x+1)-7|=2|x-3|,\\quad \\delta=\\frac{\\varepsilon}{2}",
+      },
+      {
+        title: "Why Jumps Fail",
+        body: "A jump discontinuity fails because one side of the point refuses to stay close to the function value. No matter how small delta becomes, bad nearby inputs still exist.",
+        math: "f(x)=\\begin{cases}0,&x<0\\\\1,&x\\ge 0\\end{cases}\\quad\\text{fails at }x=0",
+      },
+      {
+        title: "Advanced Multivariable Version",
+        body: "For f(x,y), closeness is measured by distance in the plane. Every approach direction must obey the same epsilon promise; checking one path is not enough.",
+        math: "\\sqrt{(x-a)^2+(y-b)^2}<\\delta\\Rightarrow |f(x,y)-f(a,b)|<\\varepsilon",
+      },
+    ],
+    proofSteps: [
+      "Write the output error |f(x)-f(a)|.",
+      "Simplify until the expression contains |x-a|.",
+      "Choose delta in terms of epsilon.",
+      "Show that |x-a|<delta forces |f(x)-f(a)|<epsilon.",
+    ],
+    conditions: [
+      "f(a) must be defined.",
+      "The limit as x approaches a must exist.",
+      "The limit must equal the actual function value.",
+    ],
   },
   "differentiability-in-one-variable": {
     formula: "f(a+h)\\approx f(a)+f'(a)h",
@@ -354,6 +387,54 @@ function ConceptExplore() {
           )}
         </div>
       </section>
+
+      {detail.deepDive && (
+        <section className="concept-deep-dive" aria-label={`${concept.title} deeper explanation`}>
+          <div className="concept-deep-head">
+            <p className="concept-explore-kicker">From basic to advanced</p>
+            <h2>Build the idea layer by layer</h2>
+            <p>
+              Epsilon-delta continuity is a precision statement: output error is controlled by input distance.
+              The cards below move from intuition to proof technique and then to higher-dimensional continuity.
+            </p>
+          </div>
+
+          <div className="concept-deep-grid">
+            {detail.deepDive.map((section) => (
+              <article className="concept-deep-card" key={section.title}>
+                <h3>{section.title}</h3>
+                <p>{section.body}</p>
+                <div className="concept-deep-math">
+                  <BlockMath latex={section.math} />
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="concept-proof-row">
+            <div className="concept-proof-panel">
+              <h3>How to Prove It</h3>
+              <ol>
+                {detail.proofSteps.map((step) => (
+                  <li key={step}>{step}</li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="concept-proof-panel concept-proof-panel--accent">
+              <h3>The Three Conditions</h3>
+              <ul>
+                {detail.conditions.map((condition) => (
+                  <li key={condition}>{condition}</li>
+                ))}
+              </ul>
+              <p>
+                Holes, jumps, vertical asymptotes, and path-dependent limits break one of these conditions.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   );
 }
